@@ -1,6 +1,19 @@
+const csv = require('csv-string');
+const fs = require('fs');
 const puppeteer = require('puppeteer');
 const agents = require('./resources/userAgents.json');
 const animals = require('./resources/animals.json');
+
+function updateCsv(name, data) {
+    fs.writeFile(name, csv.stringify(data), 'utf8', function(err) {
+        if (err) {
+            console.log('Some error occured - file either not saved or corrupted file saved.');
+        } else {
+            console.log(`saved ${name}`);
+        }
+    });
+
+}
 
 async function getPromebo() {
     const randomUserAgent = agents[Math.floor(Math.random() * agents.length)];
@@ -28,30 +41,15 @@ async function getPromebo() {
 
             return tables;
         });
-        // showing data as an example
-        console.log("----- Avaliações à Desmama");
-        console.log(data['desmama']);
-
-        console.log("----- Índice Desmama");
-        console.log(data['indiceDesmama']);
-
-        console.log("----- Avaliações ao Sobreano");
-        console.log(data['sobreano']);
-
-        console.log("----- Índice Final");
-        console.log(data['indiceFinal']);
-
-        console.log("----- Avaliações de Carcaça por Ultrassonografia");
-        console.log(data['carcaca']);
-
-        console.log("----- Índice Bioeconômico de Carcaça");
-        console.log(data['indiceCarcaca']);
-
-        console.log("----- Avaliações de Adaptação");
-        console.log(data['adaptacao']);
-
-        console.log("----- Índice Adaptação");
-        console.log(data['indiceAdaptacao']);
+        // storing data as CSV
+        updateCsv(`csv/${animal}-desmama.csv`, csv.parse(data['desmama']));
+        updateCsv(`csv/${animal}-indiceDesmama.csv`, csv.parse(data['indiceDesmama']));
+        updateCsv(`csv/${animal}-sobreano.csv`, csv.parse(data['sobreano']));
+        updateCsv(`csv/${animal}-indiceFinal.csv`, csv.parse(data['indiceFinal']));
+        updateCsv(`csv/${animal}-carcaca.csv`, csv.parse(data['carcaca']));
+        updateCsv(`csv/${animal}-indiceCarcaca.csv`, csv.parse(data['indiceCarcaca']));
+        updateCsv(`csv/${animal}-adaptacao.csv`, csv.parse(data['adaptacao']));
+        updateCsv(`csv/${animal}-indiceAdaptacao.csv`, csv.parse(data['indiceAdaptacao']));
 
         await page.close();
     }

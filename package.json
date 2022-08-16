@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "csv-string": "^4.1.0",
     "puppeteer": "^15.4.0"
   }
 }

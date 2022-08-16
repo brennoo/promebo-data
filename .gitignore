@@ -18,3 +18,5 @@ npm-debug.log
 # Yarn trash
 yarn-error.log
 
+# local files
+csv/*.csv
